@@ -1,6 +1,8 @@
 package com.black_dog20.theonekey.client.internal;
 
 import com.black_dog20.bml.utils.keybinds.KeybindsUtil;
+import com.black_dog20.bml.utils.text.TextComponentBuilder;
+import com.black_dog20.bml.utils.text.TextUtil;
 import com.black_dog20.theonekey.api.keybind.IContext;
 import com.black_dog20.theonekey.api.keybind.KeyModifier;
 import com.black_dog20.theonekey.client.keybinds.Keybinds;
@@ -18,14 +20,14 @@ public class Keybind {
     private final KeyModifier keyModifier;
     private final Supplier<Boolean> enabled;
     private final Predicate<ItemStack> extraFilter;
-    private final Component shortDescription;
+    private final Component tooltip;
     private final Consumer<IContext> clientHandler;
 
     public Keybind(KeyModifier keyModifier, Supplier<Boolean> enabled, Predicate<ItemStack> extraFilter, Component shortDescription, Consumer<IContext> clientHandler) {
         this.keyModifier = keyModifier;
         this.enabled = enabled;
         this.extraFilter = extraFilter;
-        this.shortDescription = shortDescription;
+        this.tooltip = createToolTip(shortDescription);
         this.clientHandler = clientHandler;
     }
 
@@ -45,12 +47,40 @@ public class Keybind {
         clientHandler.accept(context);
     }
 
-    public Component getToolTip() {
+    public Component getTooltip() {
+        return tooltip;
+    }
+
+    private Component createToolTip(Component shortDescription) {
         if (keyModifier == KeyModifier.NONE) {
-            return Translations.TOOLTIP_BASIC.get(ChatFormatting.GRAY, KeybindsUtil.getKeyBindText(Keybinds.keyOneKey), shortDescription);
+            return getBasicTooltip(shortDescription);
         } else {
-            return Translations.TOOLTIP_TWO_KEYS.get(ChatFormatting.GRAY, getKeyFromModifier(), KeybindsUtil.getKeyBindText(Keybinds.keyOneKey), shortDescription);
+            return getTwoKeyTooltip(shortDescription);
         }
+    }
+
+    private Component getBasicTooltip(Component shortDescription) {
+        return TextComponentBuilder.of(KeybindsUtil.getKeyBindText(Keybinds.keyOneKey))
+                .format(ChatFormatting.GOLD).space()
+                .with(Translations.TOOLTIP_TO)
+                .format(ChatFormatting.GRAY).space()
+                .with(shortDescription)
+                .format(ChatFormatting.GRAY)
+                .build();
+    }
+
+    private Component getTwoKeyTooltip(Component shortDescription) {
+        return TextComponentBuilder.of(getKeyFromModifier())
+                .format(ChatFormatting.GOLD).space()
+                .with("+")
+                .format(ChatFormatting.GOLD).space()
+                .with(KeybindsUtil.getKeyBindText(Keybinds.keyOneKey))
+                .format(ChatFormatting.GOLD).space()
+                .with(Translations.TOOLTIP_TO)
+                .format(ChatFormatting.GRAY).space()
+                .with(shortDescription)
+                .format(ChatFormatting.GRAY)
+                .build();
     }
 
     private String getKeyFromModifier() {
@@ -58,7 +88,7 @@ public class Keybind {
             case NONE:
                 return "";
             default:
-                return keyModifier.name();
+                return TextUtil.capitaliseFirstLetterFully(keyModifier.name().toLowerCase());
         }
     }
 }

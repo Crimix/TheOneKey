@@ -57,10 +57,6 @@ public class Keybinds {
             return com.black_dog20.theonekey.api.keybind.KeyModifier.SHIFT;
         } else if (!ctrl && !shift) {
             return com.black_dog20.theonekey.api.keybind.KeyModifier.ALT;
-        } else if (ctrl && !shift) {
-            return com.black_dog20.theonekey.api.keybind.KeyModifier.CTRL;
-        } else if (ctrl && !alt) {
-            return com.black_dog20.theonekey.api.keybind.KeyModifier.CTRL;
         } else {
             return null;
         }
