@@ -2,6 +2,7 @@ package com.black_dog20.theonekey.client;
 
 import com.black_dog20.theonekey.TheOneKey;
 import com.black_dog20.theonekey.api.plugin.IModPlugin;
+import com.black_dog20.theonekey.client.internal.KeybindRegistration;
 import com.black_dog20.theonekey.client.keybinds.Keybinds;
 import com.black_dog20.theonekey.client.utils.PluginFinder;
 import net.minecraftforge.api.distmarker.Dist;
@@ -22,6 +23,12 @@ public class ClientStartup {
 
     @SubscribeEvent
     public static void setupClient(FMLClientSetupEvent event) {
+        KeybindRegistration keybindRegistration = new KeybindRegistration();
         List<IModPlugin> modPlugins = PluginFinder.getModPlugins();
+        for (IModPlugin modPlugin : modPlugins) {
+            if (modPlugin.isEnabled()) {
+                modPlugin.registerKeybinds(keybindRegistration);
+            }
+        }
     }
 }

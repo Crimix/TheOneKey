@@ -5,7 +5,9 @@ import com.black_dog20.theonekey.TheOneKey;
 
 public enum Translations implements ITranslation {
     KEY_ONE_KEY("key.onekey"),
-    KEY_CATEGORY("key.category");
+    KEY_CATEGORY("key.category"),
+    TOOLTIP_BASIC("tooltip.onekey_basic"),
+    TOOLTIP_TWO_KEYS("tooltip.onekey_two_keys");
 
     private final String modId;
     private final String key;

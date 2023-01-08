@@ -4,6 +4,7 @@ plugins {
 }
 
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'maven-publish'
 apply from: 'https://raw.githubusercontent.com/Crimix/bml/1.19/common.gradle'
 apply from: 'https://raw.githubusercontent.com/Crimix/bml/1.19/shadow.gradle'
 
@@ -140,7 +141,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
 
-    implementation fg.deobf("com.black_dog20.bml:bml:${bml_version}")
+    shadowCompileOnly fg.deobf("com.black_dog20.bml:bml:${bml_version}")
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
@@ -197,3 +198,23 @@ artifacts {
 //        addGameVersion '1.19.2'
 //    }
 //}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId 'theonekey'
+            version mc_version + '-' + version_major + '.' + version_minor + '.' + version_patch
+            artifact jar
+        }
+        mavenJava(MavenPublication) {
+            artifactId 'theonekey'
+            version mc_version + '-' + version_major + '.' + version_minor + '.' + version_patch
+            artifact sourcesJar
+        }
+        mavenJava(MavenPublication) {
+            artifactId 'theonekey'
+            version mc_version + '-' + version_major + '.' + version_minor + '.' + version_patch
+            artifact apiJar
+        }
+    }
+}

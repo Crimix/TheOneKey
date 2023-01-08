@@ -1,10 +1,15 @@
 package com.black_dog20.theonekey.client.keybinds;
 
 import com.black_dog20.theonekey.TheOneKey;
+import com.black_dog20.theonekey.api.keybind.IContext;
+import com.black_dog20.theonekey.client.DataHolder;
+import com.black_dog20.theonekey.client.internal.Context;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -29,8 +34,35 @@ public class Keybinds {
         Level level = Minecraft.getInstance().level;
         Player player = Minecraft.getInstance().player;
         if (event.phase != TickEvent.Phase.START || level == null || player == null || Minecraft.getInstance().screen != null) { return; }
+        ItemStack heldItemCopy = player.getMainHandItem().copy();
         if (Keybinds.keyOneKey.consumeClick()) {
-            //TODO Implement logic
+            com.black_dog20.theonekey.api.keybind.KeyModifier modifier = getKeyModifier();
+            if (modifier != null && !heldItemCopy.isEmpty()) {
+                IContext context = new Context(modifier, heldItemCopy);
+                DataHolder.getKeybindForContext(context).ifPresent(keybind -> keybind.execute(context));
+            }
+
+        }
+    }
+
+    private static com.black_dog20.theonekey.api.keybind.KeyModifier getKeyModifier() {
+        boolean ctrl = Screen.hasControlDown();
+        boolean shift = Screen.hasShiftDown();
+        boolean alt = Screen.hasAltDown();
+        if (!ctrl && !shift && !alt) {
+            return com.black_dog20.theonekey.api.keybind.KeyModifier.NONE;
+        } else if (ctrl && !shift && !alt) {
+            return com.black_dog20.theonekey.api.keybind.KeyModifier.CTRL;
+        } else if (!ctrl && shift && !alt) {
+            return com.black_dog20.theonekey.api.keybind.KeyModifier.SHIFT;
+        } else if (!ctrl && !shift) {
+            return com.black_dog20.theonekey.api.keybind.KeyModifier.ALT;
+        } else if (ctrl && !shift) {
+            return com.black_dog20.theonekey.api.keybind.KeyModifier.CTRL;
+        } else if (ctrl && !alt) {
+            return com.black_dog20.theonekey.api.keybind.KeyModifier.CTRL;
+        } else {
+            return null;
         }
     }
 

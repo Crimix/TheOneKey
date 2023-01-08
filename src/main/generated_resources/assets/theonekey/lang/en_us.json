@@ -1,0 +1,6 @@
+{
+  "theonekey.key.category": "The One Key",
+  "theonekey.key.onekey": "Active held item",
+  "theonekey.tooltip.onekey_basic": "Use %s to %s",
+  "theonekey.tooltip.onekey_two_keys": "Use %s + %s to %s"
+}

@@ -7,9 +7,11 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.ModFileScanData;
 import org.objectweb.asm.Type;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public final class PluginFinder {
@@ -32,6 +34,7 @@ public final class PluginFinder {
                 .map(ModFileScanData::getAnnotations)
                 .flatMap(Collection::stream)
                 .filter(a -> Objects.equals(a.annotationType(), annotationType))
+                .filter(PluginFinder::areTargetModsLoaded)
                 .map(ModFileScanData.AnnotationData::memberName)
                 .collect(Collectors.toList());
     }
@@ -46,5 +49,17 @@ public final class PluginFinder {
         }
 
         return null;
+    }
+
+    private static boolean areTargetModsLoaded(ModFileScanData.AnnotationData annotationData) {
+        return Optional.of(annotationData)
+                .map(ModFileScanData.AnnotationData::annotationData)
+                .map(d -> d.get("modIds"))
+                .filter(String[].class::isInstance)
+                .map(String[].class::cast)
+                .map(Arrays::asList)
+                .stream()
+                .flatMap(Collection::stream)
+                .allMatch(ModList.get()::isLoaded);
     }
 }
