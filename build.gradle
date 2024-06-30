@@ -184,20 +184,31 @@ artifacts {
     archives sourcesJar
 }
 
-//curseforge {
-//    apiKey = curse_apiKey
-//    project {
-//        id = ''
-//        changelogType = 'markdown'
-//        changelog = "As always find the changelog here [CHANGELOG](${changelog_url})"
-//        releaseType = 'release'
-//        addArtifact(sourcesJar)
-//        addArtifact(apiJar)
-//        addGameVersion 'Forge'
-//        addGameVersion 'Java 17'
-//        addGameVersion '1.19.2'
-//    }
-//}
+curseforge {
+    apiKey = curse_apiKey
+    project {
+        id = '783155'
+        changelogType = 'markdown'
+        changelog = "As always find the changelog here [CHANGELOG](${changelog_url})"
+        releaseType = 'release'
+        addArtifact(sourcesJar)
+        addArtifact(apiJar)
+        addGameVersion 'Forge'
+        addGameVersion 'Java 17'
+        addGameVersion '1.20.1'
+    }
+}
+
+modrinth {
+    token = modrinth_token
+    projectId = "3ngBqDsN"
+    uploadFile = jar
+    versionNumber = "${mc_version}-${version}"
+    changelog = "As always find the changelog here [CHANGELOG](${changelog_url})"
+    versionType = "release"
+    loaders = ["forge"]
+    gameVersions = ["1.20.1"]
+}
 
 tasks.withType(AbstractPublishToMaven) { task ->
     dependsOn(shadowJar)
