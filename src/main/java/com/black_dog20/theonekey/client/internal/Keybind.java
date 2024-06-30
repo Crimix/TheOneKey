@@ -20,14 +20,14 @@ public class Keybind {
     private final KeyModifier keyModifier;
     private final Supplier<Boolean> enabled;
     private final Predicate<ItemStack> extraFilter;
-    private final Component tooltip;
+    private final Component shortDescription;
     private final Consumer<IContext> clientHandler;
 
     public Keybind(KeyModifier keyModifier, Supplier<Boolean> enabled, Predicate<ItemStack> extraFilter, Component shortDescription, Consumer<IContext> clientHandler) {
         this.keyModifier = keyModifier;
         this.enabled = enabled;
         this.extraFilter = extraFilter;
-        this.tooltip = createToolTip(shortDescription);
+        this.shortDescription = shortDescription;
         this.clientHandler = clientHandler;
     }
 
@@ -48,7 +48,7 @@ public class Keybind {
     }
 
     public Component getTooltip() {
-        return tooltip;
+        return createToolTip(shortDescription);
     }
 
     private Component createToolTip(Component shortDescription) {
