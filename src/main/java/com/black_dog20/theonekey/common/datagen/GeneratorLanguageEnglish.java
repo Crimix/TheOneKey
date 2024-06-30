@@ -10,7 +10,7 @@ import static com.black_dog20.theonekey.common.utils.Translations.*;
 public class GeneratorLanguageEnglish extends BaseLanguageProvider {
 
     public GeneratorLanguageEnglish(DataGenerator gen) {
-        super(gen, TheOneKey.MOD_ID, "en_us");
+        super(gen.getPackOutput(), TheOneKey.MOD_ID, "en_us");
     }
 
     @Override

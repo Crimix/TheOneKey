@@ -1,12 +1,11 @@
 plugins {
-    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'net.neoforged.gradle' version '[6.0.13, 6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'maven-publish'
-apply from: 'https://raw.githubusercontent.com/Crimix/bml/1.19/common.gradle'
-apply from: 'https://raw.githubusercontent.com/Crimix/bml/1.19/shadow.gradle'
+apply from: 'https://raw.githubusercontent.com/Crimix/bml/1.20/common.gradle'
+apply from: 'https://raw.githubusercontent.com/Crimix/bml/1.20/shadow.gradle'
 
 version = version_major + '.' + version_minor + '.' + version_patch
 group = "${mod_group}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -139,7 +138,7 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
+    minecraft "net.neoforged:forge:${mc_version}-${neo_version}"
 
     shadowCompileOnly fg.deobf("com.black_dog20.bml:bml:${bml_version}")
     runtimeOnly fg.deobf("com.black_dog20.bml:bml:${bml_version}")
@@ -199,6 +198,10 @@ artifacts {
 //        addGameVersion '1.19.2'
 //    }
 //}
+
+tasks.withType(AbstractPublishToMaven) { task ->
+    dependsOn(shadowJar)
+}
 
 publishing {
     publications {
